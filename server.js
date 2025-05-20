@@ -1,10 +1,16 @@
 const express = require('express');
 const multer = require('multer');
+const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'https://cyberhelp-fr.onrender.com',  // your frontend deployed URL here
+  methods: ['GET', 'POST']
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,7 +25,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Submit report with file upload
 app.post('/submit-report', upload.single('screenshot'), (req, res) => {
   const { name, email, incident } = req.body;
   const screenshot = req.file ? req.file.filename : null;
@@ -44,14 +49,14 @@ app.post('/submit-report', upload.single('screenshot'), (req, res) => {
     fs.writeFileSync(reportsFile, JSON.stringify(reports, null, 2), 'utf8');
 
     console.log('Report saved:', { name, email, incident, screenshot });
-    res.redirect('/thank-you.html');
+    // Redirect to frontend thank you page
+    res.redirect('https://your-frontend.onrender.com/thank-you.html');
   } catch (error) {
     console.error('Error saving report:', error);
     res.status(500).send('Server error');
   }
 });
 
-// Submit review
 app.post('/submit-review', (req, res) => {
   const { name, feedback } = req.body;
   const reviewsFile = path.join(__dirname, 'reviews.json');
@@ -73,7 +78,8 @@ app.post('/submit-review', (req, res) => {
     fs.writeFileSync(reviewsFile, JSON.stringify(reviews, null, 2), 'utf8');
 
     console.log('Review saved:', { name, feedback });
-    res.redirect('/thank-you-review.html');
+    // Redirect to frontend thank you page for reviews
+    res.redirect('https://your-frontend.onrender.com/thank-you-review.html');
   } catch (error) {
     console.error('Error saving review:', error);
     res.status(500).send('Server error');
