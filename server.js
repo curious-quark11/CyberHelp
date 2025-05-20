@@ -50,7 +50,7 @@ app.post('/submit-report', upload.single('screenshot'), (req, res) => {
 
     console.log('Report saved:', { name, email, incident, screenshot });
     // Redirect to frontend thank you page
-    res.redirect('https://your-frontend.onrender.com/thank-you.html');
+    res.redirect('https://cyberhelp-fr.onrender.com/thank-you.html');
   } catch (error) {
     console.error('Error saving report:', error);
     res.status(500).send('Server error');
@@ -79,7 +79,7 @@ app.post('/submit-review', (req, res) => {
 
     console.log('Review saved:', { name, feedback });
     // Redirect to frontend thank you page for reviews
-    res.redirect('https://your-frontend.onrender.com/thank-you-review.html');
+    res.redirect('https://cyberhelp-fr.onrender.com/thank-you-review.html');
   } catch (error) {
     console.error('Error saving review:', error);
     res.status(500).send('Server error');
